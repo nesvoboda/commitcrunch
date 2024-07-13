@@ -27,12 +27,10 @@ export default function Home() {
  
       // Handle response if necessary
       const js = await response.json()
-      // ...
       setData(js);
-      console.log("data is", js);
-    } catch (error) {
+    } catch (error: unknown) {
       // Capture the error message to display to the user
-      setError(error.message)
+      // setError(error.message)
       console.error(error)
     } finally {
       setIsLoading(false)
