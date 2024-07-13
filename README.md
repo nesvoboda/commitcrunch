@@ -2,6 +2,7 @@
 
 Look back on your growth as a developer by analyzing your contribution stats on GitHub!
 
+<img width="1552" alt="Screenshot 2024-07-13 at 23 11 53" src="https://github.com/user-attachments/assets/f5c79009-3830-4336-85b3-6fece59444b9">
 
 ## Getting Started
 
