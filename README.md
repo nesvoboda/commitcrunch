@@ -1,4 +1,7 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Commitcrunch
+
+Look back on your growth as a developer by analyzing your contribution stats on GitHub!
+
 
 ## Getting Started
 
