@@ -47,7 +47,7 @@ const Insights = ({ data }: InsightsProps) => {
     console.log("Props are ", data)
     return <>
         <h2 className="text-2xl font-semibold mt-5">Insights</h2>
-        <p className="mt-3">Here's what we can find out about you from your commits!</p>
+        <p className="mt-3">Here&apos;s what we can find out about you from your commits!</p>
         <h3 className="text-lg font-semibold mt-3">Yearly breakdown</h3>
         <p className="mt-3">The year with most contributions was {maxYear(data).value}. You made {maxYear(data).contribs} commits that year!</p>
         <h3 className="text-lg font-semibold mt-3">Yearly graph</h3>
