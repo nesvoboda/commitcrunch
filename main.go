@@ -60,7 +60,7 @@ func main() {
 			return
 		}
 
-		log.Info("Request", "username", username)
+		log.Info("Request", "url", r.URL.Path)
 
 		days, ok := handler.cache.get(username)
 		var err error
@@ -87,6 +87,38 @@ func main() {
 		log.Info("Request successful")
 	})
 
+	r.HandleFunc("/summary/{username}", func(w http.ResponseWriter, r *http.Request) {
+		username := chi.URLParam(r, "username")
+
+		if username == "" {
+			log.Error("Empty username")
+			http.Error(w, http.StatusText(404), 404)
+			return
+		}
+
+		log.Info("Request", "url", r.URL.Path)
+
+		summary, err := handler.getSummary(username)
+		if err != nil {
+			log.Error("Error getting contributions", "error", err)
+			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+			return
+		}
+
+		bytes, err := json.Marshal(summary)
+
+		if err != nil {
+			log.Error("Error marshaling", "error", err)
+			http.Error(w, http.StatusText(http.StatusServiceUnavailable), http.StatusServiceUnavailable)
+			return
+		}
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusOK)
+		w.Write(bytes)
+		log.Info("Request successful")
+
+	})
+
 	log.Info("Starting the router")
 	http.ListenAndServe(":8080", r)
 
@@ -98,7 +130,7 @@ type day struct {
 }
 
 type cache struct {
-	mu   sync.Mutex
+	mu   *sync.Mutex
 	data map[string][]day
 }
 
@@ -106,7 +138,7 @@ const MAX_CACHE_LEN = 100
 
 func newCache() cache {
 	c := cache{
-		mu:   sync.Mutex{},
+		mu:   &sync.Mutex{},
 		data: make(map[string][]day, MAX_CACHE_LEN),
 	}
 
@@ -148,7 +180,7 @@ func (c cache) clear() {
 
 	log.Info("Cache cleared")
 
-	c.data = make(map[string][]day)
+	c.data = make(map[string][]day, MAX_CACHE_LEN)
 }
 
 func (h handler) getDays(username string) ([]day, error) {
@@ -173,4 +205,48 @@ func (h handler) getDays(username string) ([]day, error) {
 	}
 
 	return days, nil
+}
+
+type summary struct {
+	Years []year `json:"years"`
+}
+
+type year struct {
+	Current  bool `json:"current"`
+	Contribs int  `json:"contribs"`
+	Value    int  `json:"value"`
+}
+
+// todo batch years
+
+func (h handler) getSummary(username string) (summary, error) {
+	ctx := context.Background()
+
+	years, err := getContributionYears(ctx, h.client, username)
+	if err != nil {
+		return summary{}, err
+	}
+
+	yrs := years.User.ContributionsCollection.ContributionYears
+
+	sum := summary{
+		Years: make([]year, len(yrs)),
+	}
+
+	for i, y := range yrs {
+		start := time.Date(y, time.January, 1, 0, 0, 0, 0, time.UTC)
+		sum.Years[i].Value = y
+
+		data, err := getContributionsForYear(ctx, h.client, username, start)
+		if err != nil {
+			return summary{}, err
+		}
+
+		if y == time.Now().Year() {
+			sum.Years[i].Current = true
+		}
+
+		sum.Years[i].Contribs = data.User.ContributionsCollection.ContributionCalendar.TotalContributions
+	}
+	return sum, nil
 }

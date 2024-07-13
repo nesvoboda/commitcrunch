@@ -4,9 +4,30 @@ package main
 
 import (
 	"context"
+	"time"
 
 	"github.com/Khan/genqlient/graphql"
 )
+
+// __getContributionYearsInput is used internally by genqlient
+type __getContributionYearsInput struct {
+	Username string `json:"username"`
+}
+
+// GetUsername returns __getContributionYearsInput.Username, and is useful for accessing the field via an interface.
+func (v *__getContributionYearsInput) GetUsername() string { return v.Username }
+
+// __getContributionsForYearInput is used internally by genqlient
+type __getContributionsForYearInput struct {
+	Username string    `json:"username"`
+	Start    time.Time `json:"start"`
+}
+
+// GetUsername returns __getContributionsForYearInput.Username, and is useful for accessing the field via an interface.
+func (v *__getContributionsForYearInput) GetUsername() string { return v.Username }
+
+// GetStart returns __getContributionsForYearInput.Start, and is useful for accessing the field via an interface.
+func (v *__getContributionsForYearInput) GetStart() time.Time { return v.Start }
 
 // __getContributionsInput is used internally by genqlient
 type __getContributionsInput struct {
@@ -15,6 +36,110 @@ type __getContributionsInput struct {
 
 // GetUsername returns __getContributionsInput.Username, and is useful for accessing the field via an interface.
 func (v *__getContributionsInput) GetUsername() string { return v.Username }
+
+// __getContributionsWithDateInput is used internally by genqlient
+type __getContributionsWithDateInput struct {
+	Username string    `json:"username"`
+	From     time.Time `json:"from"`
+	To       time.Time `json:"to"`
+}
+
+// GetUsername returns __getContributionsWithDateInput.Username, and is useful for accessing the field via an interface.
+func (v *__getContributionsWithDateInput) GetUsername() string { return v.Username }
+
+// GetFrom returns __getContributionsWithDateInput.From, and is useful for accessing the field via an interface.
+func (v *__getContributionsWithDateInput) GetFrom() time.Time { return v.From }
+
+// GetTo returns __getContributionsWithDateInput.To, and is useful for accessing the field via an interface.
+func (v *__getContributionsWithDateInput) GetTo() time.Time { return v.To }
+
+// getContributionYearsResponse is returned by getContributionYears on success.
+type getContributionYearsResponse struct {
+	// Lookup a user by login.
+	User getContributionYearsUser `json:"user"`
+}
+
+// GetUser returns getContributionYearsResponse.User, and is useful for accessing the field via an interface.
+func (v *getContributionYearsResponse) GetUser() getContributionYearsUser { return v.User }
+
+// getContributionYearsUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A user is an individual's account on GitHub that owns repositories and can make new content.
+type getContributionYearsUser struct {
+	// The collection of contributions this user has made to different repositories.
+	ContributionsCollection getContributionYearsUserContributionsCollection `json:"contributionsCollection"`
+}
+
+// GetContributionsCollection returns getContributionYearsUser.ContributionsCollection, and is useful for accessing the field via an interface.
+func (v *getContributionYearsUser) GetContributionsCollection() getContributionYearsUserContributionsCollection {
+	return v.ContributionsCollection
+}
+
+// getContributionYearsUserContributionsCollection includes the requested fields of the GraphQL type ContributionsCollection.
+// The GraphQL type's documentation follows.
+//
+// A contributions collection aggregates contributions such as opened issues and commits created by a user.
+type getContributionYearsUserContributionsCollection struct {
+	// The years the user has been making contributions with the most recent year first.
+	ContributionYears []int `json:"contributionYears"`
+}
+
+// GetContributionYears returns getContributionYearsUserContributionsCollection.ContributionYears, and is useful for accessing the field via an interface.
+func (v *getContributionYearsUserContributionsCollection) GetContributionYears() []int {
+	return v.ContributionYears
+}
+
+// getContributionsForYearResponse is returned by getContributionsForYear on success.
+type getContributionsForYearResponse struct {
+	// Lookup a user by login.
+	User getContributionsForYearUser `json:"user"`
+}
+
+// GetUser returns getContributionsForYearResponse.User, and is useful for accessing the field via an interface.
+func (v *getContributionsForYearResponse) GetUser() getContributionsForYearUser { return v.User }
+
+// getContributionsForYearUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A user is an individual's account on GitHub that owns repositories and can make new content.
+type getContributionsForYearUser struct {
+	// The collection of contributions this user has made to different repositories.
+	ContributionsCollection getContributionsForYearUserContributionsCollection `json:"contributionsCollection"`
+}
+
+// GetContributionsCollection returns getContributionsForYearUser.ContributionsCollection, and is useful for accessing the field via an interface.
+func (v *getContributionsForYearUser) GetContributionsCollection() getContributionsForYearUserContributionsCollection {
+	return v.ContributionsCollection
+}
+
+// getContributionsForYearUserContributionsCollection includes the requested fields of the GraphQL type ContributionsCollection.
+// The GraphQL type's documentation follows.
+//
+// A contributions collection aggregates contributions such as opened issues and commits created by a user.
+type getContributionsForYearUserContributionsCollection struct {
+	// A calendar of this user's contributions on GitHub.
+	ContributionCalendar getContributionsForYearUserContributionsCollectionContributionCalendar `json:"contributionCalendar"`
+}
+
+// GetContributionCalendar returns getContributionsForYearUserContributionsCollection.ContributionCalendar, and is useful for accessing the field via an interface.
+func (v *getContributionsForYearUserContributionsCollection) GetContributionCalendar() getContributionsForYearUserContributionsCollectionContributionCalendar {
+	return v.ContributionCalendar
+}
+
+// getContributionsForYearUserContributionsCollectionContributionCalendar includes the requested fields of the GraphQL type ContributionCalendar.
+// The GraphQL type's documentation follows.
+//
+// A calendar of contributions made on GitHub by a user.
+type getContributionsForYearUserContributionsCollectionContributionCalendar struct {
+	// The count of total contributions in the calendar.
+	TotalContributions int `json:"totalContributions"`
+}
+
+// GetTotalContributions returns getContributionsForYearUserContributionsCollectionContributionCalendar.TotalContributions, and is useful for accessing the field via an interface.
+func (v *getContributionsForYearUserContributionsCollectionContributionCalendar) GetTotalContributions() int {
+	return v.TotalContributions
+}
 
 // getContributionsResponse is returned by getContributions on success.
 type getContributionsResponse struct {
@@ -109,6 +234,136 @@ func (v *getContributionsUserContributionsCollectionContributionCalendarWeeksCon
 	return v.Color
 }
 
+// getContributionsWithDateResponse is returned by getContributionsWithDate on success.
+type getContributionsWithDateResponse struct {
+	// Lookup a user by login.
+	User getContributionsWithDateUser `json:"user"`
+}
+
+// GetUser returns getContributionsWithDateResponse.User, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateResponse) GetUser() getContributionsWithDateUser { return v.User }
+
+// getContributionsWithDateUser includes the requested fields of the GraphQL type User.
+// The GraphQL type's documentation follows.
+//
+// A user is an individual's account on GitHub that owns repositories and can make new content.
+type getContributionsWithDateUser struct {
+	// The collection of contributions this user has made to different repositories.
+	ContributionsCollection getContributionsWithDateUserContributionsCollection `json:"contributionsCollection"`
+}
+
+// GetContributionsCollection returns getContributionsWithDateUser.ContributionsCollection, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateUser) GetContributionsCollection() getContributionsWithDateUserContributionsCollection {
+	return v.ContributionsCollection
+}
+
+// getContributionsWithDateUserContributionsCollection includes the requested fields of the GraphQL type ContributionsCollection.
+// The GraphQL type's documentation follows.
+//
+// A contributions collection aggregates contributions such as opened issues and commits created by a user.
+type getContributionsWithDateUserContributionsCollection struct {
+	// A calendar of this user's contributions on GitHub.
+	ContributionCalendar getContributionsWithDateUserContributionsCollectionContributionCalendar `json:"contributionCalendar"`
+}
+
+// GetContributionCalendar returns getContributionsWithDateUserContributionsCollection.ContributionCalendar, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateUserContributionsCollection) GetContributionCalendar() getContributionsWithDateUserContributionsCollectionContributionCalendar {
+	return v.ContributionCalendar
+}
+
+// getContributionsWithDateUserContributionsCollectionContributionCalendar includes the requested fields of the GraphQL type ContributionCalendar.
+// The GraphQL type's documentation follows.
+//
+// A calendar of contributions made on GitHub by a user.
+type getContributionsWithDateUserContributionsCollectionContributionCalendar struct {
+	// A list of the weeks of contributions in this calendar.
+	Weeks []getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeek `json:"weeks"`
+}
+
+// GetWeeks returns getContributionsWithDateUserContributionsCollectionContributionCalendar.Weeks, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateUserContributionsCollectionContributionCalendar) GetWeeks() []getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeek {
+	return v.Weeks
+}
+
+// getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeek includes the requested fields of the GraphQL type ContributionCalendarWeek.
+// The GraphQL type's documentation follows.
+//
+// A week of contributions in a user's contribution graph.
+type getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeek struct {
+	// The days of contributions in this week.
+	ContributionDays []getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay `json:"contributionDays"`
+}
+
+// GetContributionDays returns getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeek.ContributionDays, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeek) GetContributionDays() []getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay {
+	return v.ContributionDays
+}
+
+// getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay includes the requested fields of the GraphQL type ContributionCalendarDay.
+// The GraphQL type's documentation follows.
+//
+// Represents a single day of contributions on GitHub by a user.
+type getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay struct {
+	// How many contributions were made by the user on this day.
+	ContributionCount int `json:"contributionCount"`
+	// The day this square represents.
+	Date string `json:"date"`
+	// The hex color code that represents how many contributions were made on this day compared to others in the calendar.
+	Color string `json:"color"`
+}
+
+// GetContributionCount returns getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay.ContributionCount, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay) GetContributionCount() int {
+	return v.ContributionCount
+}
+
+// GetDate returns getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay.Date, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay) GetDate() string {
+	return v.Date
+}
+
+// GetColor returns getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay.Color, and is useful for accessing the field via an interface.
+func (v *getContributionsWithDateUserContributionsCollectionContributionCalendarWeeksContributionCalendarWeekContributionDaysContributionCalendarDay) GetColor() string {
+	return v.Color
+}
+
+// The query or mutation executed by getContributionYears.
+const getContributionYears_Operation = `
+query getContributionYears ($username: String!) {
+	user(login: $username) {
+		contributionsCollection {
+			contributionYears
+		}
+	}
+}
+`
+
+func getContributionYears(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	username string,
+) (*getContributionYearsResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getContributionYears",
+		Query:  getContributionYears_Operation,
+		Variables: &__getContributionYearsInput{
+			Username: username,
+		},
+	}
+	var err_ error
+
+	var data_ getContributionYearsResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
 // The query or mutation executed by getContributions.
 const getContributions_Operation = `
 query getContributions ($username: String!) {
@@ -143,6 +398,96 @@ func getContributions(
 	var err_ error
 
 	var data_ getContributionsResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by getContributionsForYear.
+const getContributionsForYear_Operation = `
+query getContributionsForYear ($username: String!, $start: DateTime) {
+	user(login: $username) {
+		contributionsCollection(from: $start) {
+			contributionCalendar {
+				totalContributions
+			}
+		}
+	}
+}
+`
+
+func getContributionsForYear(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	username string,
+	start time.Time,
+) (*getContributionsForYearResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getContributionsForYear",
+		Query:  getContributionsForYear_Operation,
+		Variables: &__getContributionsForYearInput{
+			Username: username,
+			Start:    start,
+		},
+	}
+	var err_ error
+
+	var data_ getContributionsForYearResponse
+	resp_ := &graphql.Response{Data: &data_}
+
+	err_ = client_.MakeRequest(
+		ctx_,
+		req_,
+		resp_,
+	)
+
+	return &data_, err_
+}
+
+// The query or mutation executed by getContributionsWithDate.
+const getContributionsWithDate_Operation = `
+query getContributionsWithDate ($username: String!, $from: DateTime!, $to: DateTime!) {
+	user(login: $username) {
+		contributionsCollection(from: $from, to: $to) {
+			contributionCalendar {
+				weeks {
+					contributionDays {
+						contributionCount
+						date
+						color
+					}
+				}
+			}
+		}
+	}
+}
+`
+
+func getContributionsWithDate(
+	ctx_ context.Context,
+	client_ graphql.Client,
+	username string,
+	from time.Time,
+	to time.Time,
+) (*getContributionsWithDateResponse, error) {
+	req_ := &graphql.Request{
+		OpName: "getContributionsWithDate",
+		Query:  getContributionsWithDate_Operation,
+		Variables: &__getContributionsWithDateInput{
+			Username: username,
+			From:     from,
+			To:       to,
+		},
+	}
+	var err_ error
+
+	var data_ getContributionsWithDateResponse
 	resp_ := &graphql.Response{Data: &data_}
 
 	err_ = client_.MakeRequest(

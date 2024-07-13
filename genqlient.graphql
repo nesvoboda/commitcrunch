@@ -14,3 +14,36 @@ query getContributions($username: String!) {
   }
 }
 
+query getContributionsWithDate($username: String!, $from: DateTime!, $to: DateTime!) {
+  user(login: $username) {
+    contributionsCollection(from: $from, to: $to) {
+      contributionCalendar {
+        weeks {
+          contributionDays {
+            contributionCount
+            date
+            color
+          }
+        }
+      }
+    }
+  }
+}
+
+query getContributionYears($username: String!) {
+  user(login: $username) {
+    contributionsCollection {
+      contributionYears
+    }
+  }
+}
+
+query getContributionsForYear($username: String!, $start:DateTime) {
+  user(login: $username) {
+    contributionsCollection(from:$start) {
+      contributionCalendar{
+        totalContributions
+      }
+    }
+  }
+}
